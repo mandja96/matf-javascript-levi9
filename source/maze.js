@@ -1,3 +1,6 @@
+//##########################################
+// INITIALIZATION
+
 const TIME_LIMIT = 120
 const MAX_COLS = 10
 const MAX_ROWS = 10
@@ -14,6 +17,8 @@ for (var i=0; i<2*MAX_ROWS-1; i++) {
         matrix[i][j] = 0
     }
 }
+
+//##########################################
 
 const initializeMaze = () => {
 
@@ -108,3 +113,13 @@ const generateStart = () => {
     divPointer.style.backgroundColor = "rgb(212, 82, 6)"
 };
 
+window.addEventListener("keydown", event => {
+    if (event.key == "v") {
+      document.body.style.background = "violet";
+    }
+  });
+  window.addEventListener("keyup", event => {
+    if (event.key == "v") {
+      document.body.style.background = "";
+    }
+  });
