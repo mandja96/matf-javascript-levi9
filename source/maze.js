@@ -68,6 +68,10 @@ const generateMaze = () => {
             }
         }
     }
+
+    document.getElementById("r1c1").style.borderLeftStyle = "hidden" 
+    var end = 'r' + MAX_ROWS + 'c' + 1
+    document.getElementById(end).style.borderLeftStyle = "hidden" 
 };
 
 const startMaze = () => {
