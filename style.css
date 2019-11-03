@@ -1,0 +1,59 @@
+#wrapper {
+    margin-left: auto;
+    margin-right: auto;
+
+    width: 700px;
+    height: 700px;
+
+    position: relative;
+    visibility: visible; 
+}
+
+#start_button{
+  background-color: rgb(54, 138, 21);
+  border: none;
+  color: white;
+  width: 100px;
+  height: 50px;
+  padding: 15px 15px;
+  border-radius: 10px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 12px;
+  display: inline-block;
+  margin: 2px 2px;
+}
+
+#restart_button{
+    background-color: rgb(212, 82, 6);
+    border: none;
+    color: white;
+    width: 100px;
+    height: 50px;
+    padding: 15px 15px;
+    border-radius: 10px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 12px;
+    display: inline-block;
+    margin: 2px 2px;
+}
+
+#timer{
+    font-size: 20px;
+    font-weight: 100;
+    visibility: visible;
+}
+  
+table {
+    width: 600px;
+    table-layout: fixed;
+    border-collapse: collapse;
+    outline: 2px;
+}
+
+td {
+    border: 2px solid rgb(50, 68, 167);
+    text-align: center;
+    height: 50px;
+}
