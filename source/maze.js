@@ -27,6 +27,10 @@ var currentState = {
     i : 1,
     j : 1
 }
+var endState = {
+    i : MAX_ROWS,
+    j : 1
+}
 //##########################################
 
 const initializeMaze = () => {
@@ -101,7 +105,7 @@ const startMaze = () => {
                 .innerText = 'Timer status: ' + currentTimer
 
             if (currentTimer === TIME_LIMIT) {
-                alert(" GAME OVER\n" + "Number of moves: " + numOfMoves); 
+                alert(" GAME OVER\n" + " Number of moves: " + numOfMoves); 
                 clearInterval(timer)
             }
         }, 1000)
@@ -122,6 +126,7 @@ const generateState = () => {
 
     cell.appendChild(divPointer)
     divPointer.style.backgroundColor = "rgb(54, 138, 21)"
+    checkFinish()
 };
 
 window.addEventListener("keydown", event => {
@@ -217,3 +222,11 @@ window.addEventListener("keydown", event => {
         }
     }
 });
+
+const checkFinish = () => {
+    if (currentState.i == endState.i && currentState.j == endState.j){
+        alert(" Yaaay! You mazed it :)\n" + " Total moves: " + numOfMoves + "\n" 
+            + " Total seconds " + currentTimer)
+        document.location.reload()
+    }
+}
