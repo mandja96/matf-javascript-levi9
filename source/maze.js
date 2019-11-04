@@ -1,6 +1,6 @@
 //##########################################
 // INITIALIZATION
-const TIME_LIMIT = 10
+const TIME_LIMIT = 20
 const MAX_COLS = 17
 const MAX_ROWS = 17
 
