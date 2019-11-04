@@ -226,7 +226,7 @@ window.addEventListener("keydown", event => {
 const checkFinish = () => {
     if (currentState.i == endState.i && currentState.j == endState.j){
         alert(" Yaaay! You mazed it :)\n" + " Total moves: " + numOfMoves + "\n" 
-            + " Total seconds " + currentTimer)
+            + " Total seconds: " + currentTimer)
         document.location.reload()
     }
 }
