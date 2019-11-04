@@ -107,6 +107,7 @@ const startMaze = () => {
             if (currentTimer === TIME_LIMIT) {
                 alert(" GAME OVER\n" + " Number of moves: " + numOfMoves); 
                 clearInterval(timer)
+                document.location.reload()
             }
         }, 1000)
         initializeMaze()
