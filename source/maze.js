@@ -2,8 +2,8 @@
 // INITIALIZATION
 
 const TIME_LIMIT = 120
-const MAX_COLS = 10
-const MAX_ROWS = 10
+const MAX_COLS = 15
+const MAX_ROWS = 15
 
 var timerStarted = false
 var timer
@@ -16,6 +16,15 @@ for (var i=0; i<2*MAX_ROWS-1; i++) {
     for (var j=0; j<2*MAX_COLS-1; j++) {
         matrix[i][j] = 0
     }
+}
+
+var previousState = {
+    i : 1,
+    j : 1
+}
+var currentState = {
+    i : 1,
+    j : 1
 }
 
 //##########################################
@@ -34,7 +43,7 @@ const initializeMaze = () => {
 
     document.getElementById("maze_grid").innerHTML = innerHTMLString
     generateMaze()
-    generateStart()
+    generateState()
 };
 
 const generateMaze = () => {
@@ -103,23 +112,102 @@ const resetMaze = () => {
     document.location.reload()
 };
 
-const generateStart = () => {
-    var cell = document.getElementById('r1c1')
+const generateState = () => {
+    let nameID = 'r' + currentState.i + 'c' + currentState.j
+    var cell = document.getElementById(nameID)
     var divPointer = document.createElement('div')
     divPointer.id = "pointer"
     divPointer.textContent = "You"
 
     cell.appendChild(divPointer)
-    divPointer.style.backgroundColor = "rgb(212, 82, 6)"
+    divPointer.style.backgroundColor = "rgb(54, 138, 21)"
 };
 
 window.addEventListener("keydown", event => {
-    if (event.key == "v") {
-      document.body.style.background = "violet";
+    if (event.key == "c") {
+      document.body.style.background = "white";
     }
   });
   window.addEventListener("keyup", event => {
-    if (event.key == "v") {
+    if (event.key == "c") {
       document.body.style.background = "";
+    }
+  });
+
+  // left = 37, up = 38, right = 39, down = 40
+  window.addEventListener("keydown", event => {
+      if (event.key == 'a') {
+          if(currentState.j == 1){
+              console.log("Ne mozes levo!")
+          }
+          else{
+            if (matrix[2*currentState.i-2][2*currentState.j-3] == 1){ 
+                previousState.i = currentState.i
+                previousState.j = currentState.j
+                currentState.i = previousState.i
+                currentState.j = previousState.j - 1
+
+                let id = "pointer"
+                document.getElementById(id).remove()
+                generateState()
+            }
+        }
+    }
+  });
+  window.addEventListener("keydown", event => {
+      if (event.key == 'w') {
+          if(currentState.i == 1){
+            console.log("Ne mozes gore!")
+          }
+          else{
+            if(matrix[2*currentState.i-3][2*currentState.j-2] == 1){
+                previousState.i = currentState.i
+                previousState.j = currentState.j
+                currentState.i = previousState.i - 1
+                currentState.j = previousState.j
+
+                let id = "pointer"
+                document.getElementById(id).remove()
+                generateState()
+            }
+          }
+      }
+  });
+  window.addEventListener("keydown", event => {
+    if (event.key == 'd') {
+        if(currentState.j == MAX_COLS){
+            console.log("Ne mozes desno!")
+        }
+        else{
+            if(matrix[2*currentState.i-2][2*currentState.j-2+1] == 1){
+                previousState.i = currentState.i
+                previousState.j = currentState.j
+                currentState.i = previousState.i
+                currentState.j = previousState.j + 1
+
+                let id = "pointer"
+                document.getElementById(id).remove()
+                generateState()
+            }
+        }
+    }
+  });
+  window.addEventListener("keydown", event => {
+    if (event.key == 's') {
+        if(currentState.i == MAX_ROWS){
+            console.log("Ne mozes dole!")
+        }
+        else{
+            if(matrix[2*currentState.i-2+1][2*currentState.j-2] == 1){
+                previousState.i = currentState.i
+                previousState.j = currentState.j
+                currentState.i = previousState.i+1
+                currentState.j = previousState.j
+
+                let id = "pointer"
+                document.getElementById(id).remove()
+                generateState()
+            }
+        }
     }
   });

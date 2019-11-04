@@ -1,59 +1,80 @@
+body{
+    background-color: rgb(29, 29, 29);
+}
+
 #wrapper {
+
     margin-left: auto;
     margin-right: auto;
-
-    width: 700px;
-    height: 700px;
+    margin-top: auto;
+    width: 800px;
+    height: 800px;
 
     position: relative;
     visibility: visible; 
 }
 
 #start_button{
+  color: blanchedalmond;
   background-color: rgb(54, 138, 21);
   border: none;
   color: white;
   width: 100px;
   height: 50px;
-  padding: 15px 15px;
   border-radius: 10px;
   text-align: center;
   text-decoration: none;
   font-size: 12px;
   display: inline-block;
-  margin: 2px 2px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 50px;
 }
 
 #restart_button{
+    color: blanchedalmond;
     background-color: rgb(212, 82, 6);
     border: none;
     color: white;
     width: 100px;
     height: 50px;
-    padding: 15px 15px;
     border-radius: 10px;
     text-align: center;
     text-decoration: none;
     font-size: 12px;
     display: inline-block;
-    margin: 2px 2px;
+    margin-top: 50px;
+}
+
+#header{
+    margin-left: auto;
+    margin-right: auto;
+    width: 800px;
+    position: relative;
+    visibility: visible; 
+    border: 1 px black solid;
 }
 
 #timer{
     font-size: 20px;
     font-weight: 100;
     visibility: visible;
+    color: blanchedalmond;
 }
   
 table {
-    width: 600px;
     table-layout: fixed;
     border-collapse: collapse;
     outline: 2px;
 }
 
 td {
-    border: 2px solid rgb(50, 68, 167);
+    border: 2px solid blanchedalmond;
     text-align: center;
-    height: 50px;
+    height: 30px;
+    width: 30px;
+}
+
+#pointer{
+    border-radius: 50px;
 }
