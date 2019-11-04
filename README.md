@@ -3,7 +3,8 @@ JavaScript course by Levi9 company, at the Faculty of Mathematics, University of
 
 
 ## Introduction
-I have implemented a simple Maze Game using Vanilla JavaScript, HTML and CSS.
+I have implemented a simple <strong>Maze Game</strong> using Vanilla JavaScript, HTML and CSS.  
+If you want to try it, just open <strong>index.html</strong> in the <em><strong>source></strong></em> directory. 
 
 ### Controls
 | Key | Description|
