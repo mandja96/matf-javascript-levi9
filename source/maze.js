@@ -9,8 +9,28 @@ var timer
 var currentTimer = 0
 
 var numOfMoves = 0
+var soundOn = false
 
 var matrix = []
+var soundMove = new sound("../sound/soundMove.wav")
+var soundWall = new sound("../sound/soundWall.ogg")
+var soundWin = new sound("../sound/soundWin.mp3")
+
+
+function sound(src) {
+    this.sound = document.createElement("audio");
+    this.sound.src = src;
+    this.sound.setAttribute("preload", "auto");
+    this.sound.setAttribute("controls", "none");
+    this.sound.style.display = "none";
+    document.body.appendChild(this.sound);
+    this.play = function(){
+        this.sound.play();
+    }
+    this.stop = function(){
+        this.sound.pause();
+    }    
+}
 
 for (var i=0; i<2*MAX_ROWS-1; i++) {
     matrix[i] = []
@@ -160,6 +180,7 @@ window.addEventListener("keydown", event => {
                 document.getElementById(id).remove()
                 generateState()
             }
+            
         }
     }
 });
@@ -167,6 +188,7 @@ window.addEventListener("keydown", event => {
     if (event.key == 'w') {
         if(currentState.i == 1){
             console.log("Ne mozes gore!")
+           
         }
         else{
             if(matrix[2*currentState.i-3][2*currentState.j-2] == 1){
@@ -180,6 +202,7 @@ window.addEventListener("keydown", event => {
                 document.getElementById(id).remove()
                 generateState()
             }
+            
         }
     }
   });
@@ -187,6 +210,7 @@ window.addEventListener("keydown", event => {
     if (event.key == 'd') {
         if(currentState.j == MAX_COLS){
             console.log("Ne mozes desno!")
+         
         }
         else{
             if(matrix[2*currentState.i-2][2*currentState.j-2+1] == 1){
@@ -200,6 +224,7 @@ window.addEventListener("keydown", event => {
                 document.getElementById(id).remove()
                 generateState()
             }
+           
         }
     }
 });
@@ -207,6 +232,7 @@ window.addEventListener("keydown", event => {
     if (event.key == 's') {
         if(currentState.i == MAX_ROWS){
             console.log("Ne mozes dole!")
+           
         }
         else{
             if(matrix[2*currentState.i-2+1][2*currentState.j-2] == 1){
@@ -220,14 +246,33 @@ window.addEventListener("keydown", event => {
                 document.getElementById(id).remove()
                 generateState()
             }
+           
         }
     }
 });
 
 const checkFinish = () => {
     if (currentState.i == endState.i && currentState.j == endState.j){
+        if(soundOn){
+            soundWin.play()
+        }
         alert(" Yaaay! You mazed it :)\n" + " Total moves: " + numOfMoves + "\n" 
             + " Total seconds: " + currentTimer)
         document.location.reload()
     }
 }
+
+// #######################################
+// SOUND PART
+
+var checkbox = document.getElementById("sound")
+checkbox.addEventListener('change', e => {
+
+    if(e.target.checked){
+        soundOn = true
+    }
+    else{
+        soundOn = false
+    }
+    console.log(soundOn)
+});
