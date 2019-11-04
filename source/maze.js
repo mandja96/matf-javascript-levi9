@@ -1,13 +1,14 @@
 //##########################################
 // INITIALIZATION
-
-const TIME_LIMIT = 120
-const MAX_COLS = 15
-const MAX_ROWS = 15
+const TIME_LIMIT = 10
+const MAX_COLS = 17
+const MAX_ROWS = 17
 
 var timerStarted = false
 var timer
 var currentTimer = 0
+
+var numOfMoves = 0
 
 var matrix = []
 
@@ -26,7 +27,6 @@ var currentState = {
     i : 1,
     j : 1
 }
-
 //##########################################
 
 const initializeMaze = () => {
@@ -83,8 +83,11 @@ const generateMaze = () => {
         }
     }
 
+    // START
     document.getElementById("r1c1").style.borderLeftStyle = "hidden" 
     var end = 'r' + MAX_ROWS + 'c' + 1
+
+    // FINISH
     document.getElementById(end).style.borderLeftStyle = "hidden" 
 };
 
@@ -98,12 +101,10 @@ const startMaze = () => {
                 .innerText = 'Timer status: ' + currentTimer
 
             if (currentTimer === TIME_LIMIT) {
-                alert("GAME OVER");
+                alert(" GAME OVER\n" + "Number of moves: " + numOfMoves); 
                 clearInterval(timer)
-                document.location.reload();
             }
         }, 1000)
-
         initializeMaze()
     }
 };
@@ -117,7 +118,7 @@ const generateState = () => {
     var cell = document.getElementById(nameID)
     var divPointer = document.createElement('div')
     divPointer.id = "pointer"
-    divPointer.textContent = "You"
+    divPointer.textContent = "x"
 
     cell.appendChild(divPointer)
     divPointer.style.backgroundColor = "rgb(54, 138, 21)"
@@ -128,20 +129,22 @@ window.addEventListener("keydown", event => {
       document.body.style.background = "white";
     }
   });
-  window.addEventListener("keyup", event => {
+window.addEventListener("keyup", event => {
     if (event.key == "c") {
-      document.body.style.background = "";
+        document.body.style.background = "";
     }
-  });
+});
 
   // left = 37, up = 38, right = 39, down = 40
-  window.addEventListener("keydown", event => {
-      if (event.key == 'a') {
-          if(currentState.j == 1){
-              console.log("Ne mozes levo!")
-          }
-          else{
+  // a, w, d, s
+window.addEventListener("keydown", event => {
+    if (event.key == 'a') {
+        if(currentState.j == 1){
+            console.log("Ne mozes levo!")
+        }
+        else{
             if (matrix[2*currentState.i-2][2*currentState.j-3] == 1){ 
+                numOfMoves++
                 previousState.i = currentState.i
                 previousState.j = currentState.j
                 currentState.i = previousState.i
@@ -153,14 +156,15 @@ window.addEventListener("keydown", event => {
             }
         }
     }
-  });
-  window.addEventListener("keydown", event => {
-      if (event.key == 'w') {
-          if(currentState.i == 1){
+});
+window.addEventListener("keydown", event => {
+    if (event.key == 'w') {
+        if(currentState.i == 1){
             console.log("Ne mozes gore!")
-          }
-          else{
+        }
+        else{
             if(matrix[2*currentState.i-3][2*currentState.j-2] == 1){
+                numOfMoves++
                 previousState.i = currentState.i
                 previousState.j = currentState.j
                 currentState.i = previousState.i - 1
@@ -170,16 +174,17 @@ window.addEventListener("keydown", event => {
                 document.getElementById(id).remove()
                 generateState()
             }
-          }
-      }
+        }
+    }
   });
-  window.addEventListener("keydown", event => {
+window.addEventListener("keydown", event => {
     if (event.key == 'd') {
         if(currentState.j == MAX_COLS){
             console.log("Ne mozes desno!")
         }
         else{
             if(matrix[2*currentState.i-2][2*currentState.j-2+1] == 1){
+                numOfMoves++
                 previousState.i = currentState.i
                 previousState.j = currentState.j
                 currentState.i = previousState.i
@@ -191,14 +196,15 @@ window.addEventListener("keydown", event => {
             }
         }
     }
-  });
-  window.addEventListener("keydown", event => {
+});
+window.addEventListener("keydown", event => {
     if (event.key == 's') {
         if(currentState.i == MAX_ROWS){
             console.log("Ne mozes dole!")
         }
         else{
             if(matrix[2*currentState.i-2+1][2*currentState.j-2] == 1){
+                numOfMoves++
                 previousState.i = currentState.i
                 previousState.j = currentState.j
                 currentState.i = previousState.i+1
@@ -210,4 +216,4 @@ window.addEventListener("keydown", event => {
             }
         }
     }
-  });
+});

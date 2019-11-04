@@ -1,5 +1,5 @@
 body{
-    background-color: rgb(29, 29, 29);
+    background-color: rgb(34, 34, 34);
 }
 
 #wrapper {
@@ -7,8 +7,8 @@ body{
     margin-left: auto;
     margin-right: auto;
     margin-top: auto;
-    width: 800px;
-    height: 800px;
+    width: 600px;
+    height: 600px;
 
     position: relative;
     visibility: visible; 
@@ -76,5 +76,5 @@ td {
 }
 
 #pointer{
-    border-radius: 50px;
+    border-radius: 80%;
 }
