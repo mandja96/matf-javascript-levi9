@@ -147,7 +147,10 @@ const generateState = () => {
 
     cell.appendChild(divPointer)
     divPointer.style.backgroundColor = "rgb(54, 138, 21)"
-    checkFinish()
+
+    setTimeout(function() {
+        checkFinish()
+    }, 0)
 };
 
 window.addEventListener("keydown", event => {
