@@ -1,21 +1,5 @@
 //##########################################
-// INITIALIZATION
-const TIME_LIMIT = 20;
-const MAX_COLS = 17;
-const MAX_ROWS = 17;
-
-var timerStarted = false;
-var timer;
-var currentTimer = 0;
-
-var numOfMoves = 0;
-var soundOn = false;
-
-var matrix = [];
-var soundMove = new sound("../sound/soundMove.wav");
-var soundWall = new sound("../sound/soundWall.ogg");
-var soundWin = new sound("../sound/soundWin.mp3");
-
+// SOUND object
 
 function sound(src) {
     this.sound = document.createElement("audio");
@@ -31,117 +15,147 @@ function sound(src) {
         this.sound.pause();
     }    
 }
+const soundWin = new sound("../sound/soundWin.mp3");
 
-for (var i=0; i<2*MAX_ROWS-1; i++) {
-    matrix[i] = [];
-    for (var j=0; j<2*MAX_COLS-1; j++) {
-        matrix[i][j] = 0;
-    }
-}
-
-var previousState = {
-    i : 1,
-    j : 1
-}
-var currentState = {
-    i : 1,
-    j : 1
-}
-var endState = {
-    i : MAX_ROWS,
-    j : 1
-}
 //##########################################
 
-const initializeMaze = () => {
+const maze = new Maze(15, 15, 20);
 
-    var innerHTMLString = "";
-    innerHTMLString = '<table>';
-    for (var the_row = 1; the_row <= MAX_ROWS; the_row++) {
-        innerHTMLString += '<tr>';
-        for (var the_col = 1; the_col <= MAX_COLS; the_col++) 
-            innerHTMLString += '<td id=\"r' + the_row + 'c' + the_col + '\"</td>';
-        innerHTMLString += '</tr>';
+
+// MAZE object
+function Maze(rows, 
+              cols, 
+              time_limit) {
+
+    this.TIME_LIMIT = time_limit;
+    this.MAX_COLS = rows;
+    this.MAX_ROWS = cols;
+    this.numOfMoves = 0;
+    this.soundOn = false;
+
+    this.matrix = [];
+    for (let i=0; i<2*this.MAX_ROWS-1; i++) {
+        this.matrix[i] = [];
+        for (let j=0; j<2*this.MAX_COLS-1; j++) {
+            this.matrix[i][j] = 0;
+        }
     }
-    innerHTMLString += '</table>';
+    let checkbox = document.getElementById("sound");
+    checkbox.addEventListener('change', e => {
+        if(e.target.checked){
+            this.soundOn = true;
+        }
+        else{
+            this.soundOn = false;
+        }
+        console.log(this.soundOn);
+    });
 
-    document.getElementById("maze_grid").innerHTML = innerHTMLString;
-    generateMaze();
-    generateState();
-};
+    this.initializeMaze = () => {
+        let innerHTMLString = "";
+        innerHTMLString = '<table>';
+        for (let the_row = 1; the_row <= this.MAX_ROWS; the_row++) {
+            innerHTMLString += '<tr>';
+            for (let the_col = 1; the_col <= this.MAX_COLS; the_col++) 
+                innerHTMLString += '<td id=\"r' + the_row + 'c' + the_col + '\"</td>';
+            innerHTMLString += '</tr>';
+        }
+        innerHTMLString += '</table>';
+    
+        document.getElementById("maze_grid").innerHTML = innerHTMLString;
+        this.generateMaze();
+        generateState();
+    };
 
-const generateMaze = () => {
+    this.timerStarted = false;
+    this.timer = 0;
+    this.currentTimer = 0;
 
-    for (var the_row = 1; the_row <= MAX_ROWS; the_row++) {
-        for (var the_col = 1; the_col <= MAX_COLS; the_col++) {
+    this.previousState = {
+        i : 1,
+        j : 1
+    }
+    this.currentState = {
+        i : 1,
+        j : 1
+    }
+    this.endState = {
+        i : this.MAX_ROWS,
+        j : 1
+    }
+
+    this.generateMaze = () => {
+        for (let the_row = 1; the_row <= this.MAX_ROWS; the_row++) {
+            for (let the_col = 1; the_col <= this.MAX_COLS; the_col++) {
+                
+                let cell = 'r' + the_row + 'c' + the_col;
             
-            var cell = 'r' + the_row + 'c' + the_col;
-        
-            if (the_row === 1) {
-                if (the_col === MAX_COLS)
-                    continue;
-                document.getElementById(cell).style.borderRightStyle = "hidden";
-                matrix[2*the_row-2][2*the_col-2] = 1;
-                matrix[2*the_row-2][2*the_col-1] = 1;
-                matrix[2*the_row-2][2*the_col] = 1;
-            }
-            else if (the_col === MAX_COLS) {
-                document.getElementById(cell).style.borderTopStyle = "hidden";
-                matrix[2*the_row-3][2*the_col-2] = 1;
-                matrix[2*the_row-2][2*the_col-2] = 1;
-            }
-            else {
-                if (Math.random() >= 0.5) {                    
-                    document.getElementById(cell).style.borderTopStyle = "hidden";
-                    matrix[2*the_row-4][2*the_col-2] = 1;
-                    matrix[2*the_row-3][2*the_col-2] = 1;
-                    matrix[2*the_row-2][2*the_col-2] = 1;
-
-                } else {
+                if (the_row === 1) {
+                    if (the_col === this.MAX_COLS)
+                        continue;
                     document.getElementById(cell).style.borderRightStyle = "hidden";
-                    matrix[2*the_row-2][2*the_col-2] = 1;
-                    matrix[2*the_row-2][2*the_col-1] = 1;
-                    matrix[2*the_row-2][2*the_col] = 1;
+                    this.matrix[2*the_row-2][2*the_col-2] = 1;
+                    this.matrix[2*the_row-2][2*the_col-1] = 1;
+                    this.matrix[2*the_row-2][2*the_col] = 1;
+                }
+                else if (the_col === this.MAX_COLS) {
+                    document.getElementById(cell).style.borderTopStyle = "hidden";
+                    this.matrix[2*the_row-3][2*the_col-2] = 1;
+                    this.matrix[2*the_row-2][2*the_col-2] = 1;
+                }
+                else {
+                    if (Math.random() >= 0.5) {                    
+                        document.getElementById(cell).style.borderTopStyle = "hidden";
+                        this.matrix[2*the_row-4][2*the_col-2] = 1;
+                        this.matrix[2*the_row-3][2*the_col-2] = 1;
+                        this.matrix[2*the_row-2][2*the_col-2] = 1;
+
+                    } else {
+                        document.getElementById(cell).style.borderRightStyle = "hidden";
+                        this.matrix[2*the_row-2][2*the_col-2] = 1;
+                        this.matrix[2*the_row-2][2*the_col-1] = 1;
+                        this.matrix[2*the_row-2][2*the_col] = 1;
+                    }
                 }
             }
         }
-    }
 
-    // START
-    document.getElementById("r1c1").style.borderLeftStyle = "hidden";
-    var end = 'r' + MAX_ROWS + 'c' + 1;
+        // START
+        document.getElementById("r1c1").style.borderLeftStyle = "hidden";
+        let end = 'r' + this.MAX_ROWS + 'c' + 1;
 
-    // FINISH
-    document.getElementById(end).style.borderLeftStyle = "hidden"; 
-};
+        // FINISH
+        document.getElementById(end).style.borderLeftStyle = "hidden"; 
+    };
 
-const startMaze = () => {
-    if (!timerStarted) {
-        timerStarted = true;
-        timer = window.setInterval(() => {
-            currentTimer++;
+    this.startMaze = () => {
+        if (!this.timerStarted) {
+            this.timerStarted = true;
+            this.timer = window.setInterval(() => {
+                this.currentTimer++;
 
-            document.getElementById('timer')
-                .innerText = 'Timer status: ' + currentTimer;
+                document.getElementById('timer')
+                    .innerText = 'Timer status: ' + this.currentTimer;
 
-            if (currentTimer === TIME_LIMIT) {
-                alert(" GAME OVER\n" + " Number of moves: " + numOfMoves); 
-                clearInterval(timer);
-                document.location.reload();
-            }
-        }, 1000)
-        initializeMaze();
-    }
-};
+                if (this.currentTimer === this.TIME_LIMIT) {
+                    alert(" GAME OVER\n" + " Number of moves: " + this.numOfMoves); 
+                    clearInterval(this.timer);
+                    document.location.reload();
+                }
+            }, 1000)
+            this.initializeMaze();
+        }
+    };
 
-const resetMaze = () => {
-    document.location.reload();
-};
+    this.resetMaze = () => {
+        document.location.reload();
+    };
+}
 
 const generateState = () => {
-    let nameID = 'r' + currentState.i + 'c' + currentState.j;
-    var cell = document.getElementById(nameID);
-    var divPointer = document.createElement('div');
+    let nameID = 'r' + maze.currentState.i + 'c' + maze.currentState.j;
+    let cell = document.getElementById(nameID);
+    let divPointer = document.createElement('div');
     divPointer.id = "pointer";
     divPointer.textContent = "x";
 
@@ -154,51 +168,38 @@ const generateState = () => {
 };
 
 window.addEventListener("keydown", event => {
-    if (event.key === "c") {
-      document.body.style.background = "white";
-    }
-  });
-window.addEventListener("keyup", event => {
-    if (event.key === "c") {
-        document.body.style.background = "";
-    }
-});
-
-  // left = 37, up = 38, right = 39, down = 40
-  // a, w, d, s
-window.addEventListener("keydown", event => {
     if (event.key === 'a') {
-        if(currentState.j === 1){
+        if(maze.currentState.j === 1){
             console.log("Ne mozes levo!");
         }
         else{
-            if (matrix[2*currentState.i-2][2*currentState.j-3] === 1){ 
-                numOfMoves++;
-                previousState.i = currentState.i;
-                previousState.j = currentState.j;
-                currentState.i = previousState.i;
-                currentState.j = previousState.j - 1;
+            if (maze.matrix[2*maze.currentState.i-2][2*maze.currentState.j-3] === 1){ 
+                maze.numOfMoves++;
+                maze.previousState.i = maze.currentState.i;
+                maze.previousState.j = maze.currentState.j;
+                maze.currentState.i = maze.previousState.i;
+                maze.currentState.j = maze.previousState.j - 1;
 
                 let id = "pointer";
                 document.getElementById(id).remove();
                 generateState();
             }
-            
         }
     }
 });
+
 window.addEventListener("keydown", event => {
     if (event.key === 'w') {
-        if(currentState.i === 1){
+        if(maze.currentState.i === 1){
             console.log("Ne mozes gore!");
         }
         else{
-            if(matrix[2*currentState.i-3][2*currentState.j-2] === 1){
-                numOfMoves++;
-                previousState.i = currentState.i;
-                previousState.j = currentState.j;
-                currentState.i = previousState.i - 1;
-                currentState.j = previousState.j;
+            if(maze.matrix[2*maze.currentState.i-3][2*maze.currentState.j-2] === 1){
+                maze.numOfMoves++;
+                maze.previousState.i = maze.currentState.i;
+                maze.previousState.j = maze.currentState.j;
+                maze.currentState.i = maze.previousState.i - 1;
+                maze.currentState.j = maze.previousState.j;
 
                 let id = "pointer";
                 document.getElementById(id).remove();
@@ -206,41 +207,41 @@ window.addEventListener("keydown", event => {
             }   
         }
     }
-  });
+});
 
 window.addEventListener("keydown", event => {
     if (event.key === 'd') {
-        if(currentState.j === MAX_COLS){
+        if(maze.currentState.j === maze.MAX_COLS){
             console.log("Ne mozes desno!");
         }
         else{
-            if(matrix[2*currentState.i-2][2*currentState.j-2+1] === 1){
-                numOfMoves++;
-                previousState.i = currentState.i;
-                previousState.j = currentState.j;
-                currentState.i = previousState.i;
-                currentState.j = previousState.j + 1;
+            if(maze.matrix[2*maze.currentState.i-2][2*maze.currentState.j-2+1] === 1){
+                maze.numOfMoves++;
+                maze.previousState.i = maze.currentState.i;
+                maze.previousState.j = maze.currentState.j;
+                maze.currentState.i = maze.previousState.i;
+                maze.currentState.j = maze.previousState.j + 1;
 
                 let id = "pointer";
                 document.getElementById(id).remove();
                 generateState();
             }
-           
         }
     }
 });
+
 window.addEventListener("keydown", event => {
     if (event.key === 's') {
-        if(currentState.i === MAX_ROWS){
+        if(maze.currentState.i === maze.MAX_ROWS){
             console.log("Ne mozes dole!");
         }
         else{
-            if(matrix[2*currentState.i-2+1][2*currentState.j-2] === 1){
-                numOfMoves++;
-                previousState.i = currentState.i;
-                previousState.j = currentState.j;
-                currentState.i = previousState.i+1;
-                currentState.j = previousState.j;
+            if(maze.matrix[2*maze.currentState.i-2+1][2*maze.currentState.j-2] === 1){
+                maze.numOfMoves++;
+                maze.previousState.i = maze.currentState.i;
+                maze.previousState.j = maze.currentState.j;
+                maze.currentState.i = maze.previousState.i+1;
+                maze.currentState.j = maze.previousState.j;
 
                 let id = "pointer";
                 document.getElementById(id).remove();
@@ -251,25 +252,14 @@ window.addEventListener("keydown", event => {
 });
 
 const checkFinish = () => {
-    if (currentState.i === endState.i && currentState.j === endState.j){
-        if(soundOn){
+    if (maze.currentState.i === maze.endState.i && maze.currentState.j === maze.endState.j){
+        if(maze.soundOn){
             soundWin.play();
         }
-        alert(" Yaaay! You mazed it :)\n" + " Total moves: " + numOfMoves + "\n" 
-            + " Total seconds: " + currentTimer);
+        alert(" Yaaay! You mazed it :)\n" + " Total moves: " + maze.numOfMoves + "\n" 
+            + " Total seconds: " + maze.currentTimer);
         document.location.reload();
     }
 }
 
 // #######################################
-
-var checkbox = document.getElementById("sound");
-checkbox.addEventListener('change', e => {
-    if(e.target.checked){
-        soundOn = true;
-    }
-    else{
-        soundOn = false;
-    }
-    console.log(soundOn);
-});
