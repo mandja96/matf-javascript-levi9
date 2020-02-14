@@ -22,7 +22,7 @@ const soundWin = new sound("../sound/soundWin.mp3");
 const maze = new Maze(15, 15, 20);
 
 
-// MAZE object
+// MAZE object, sve je zapravo funkcija u JavaScript
 function Maze(rows, 
               cols, 
               time_limit) {
