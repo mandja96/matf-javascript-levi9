@@ -1,0 +1,25 @@
+{
+  "name": "javascript-project",
+  "version": "1.0.0",
+  "description": "Maze game created in Vanilla JavaScript",
+  "main": "./back/index.js",
+  "scripts": {
+    "start": "node ./back/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mandja96/JavaScript-Project.git"
+  },
+  "author": "Andelka Milovanovic",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mandja96/JavaScript-Project/issues"
+  },
+  "homepage": "https://github.com/mandja96/JavaScript-Project#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mongodb": "^3.3.5"
+  }
+}

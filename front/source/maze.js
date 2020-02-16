@@ -19,8 +19,8 @@ const soundWin = new sound("../sound/soundWin.mp3");
 
 //##########################################
 
-const maze = new Maze(15, 15, 20);
-
+const maze = new Maze(16, 16, 20);
+let username = "";
 
 // MAZE object, sve je zapravo funkcija u JavaScript
 function Maze(rows, 
@@ -128,10 +128,12 @@ function Maze(rows,
         document.getElementById(end).style.borderLeftStyle = "hidden"; 
     };
 
-    this.startMaze = () => {
-        if (!this.timerStarted) {
+    this.startMaze = async () => {
+        username = document.getElementById("username").value;
+
+        if (!this.timerStarted && username.length > 0) {
             this.timerStarted = true;
-            this.timer = window.setInterval(() => {
+            this.timer = window.setInterval( async () => {
                 this.currentTimer++;
 
                 document.getElementById('timer')
@@ -139,10 +141,17 @@ function Maze(rows,
 
                 if (this.currentTimer === this.TIME_LIMIT) {
                     alert(" GAME OVER\n" + " Number of moves: " + this.numOfMoves); 
+                    await sendResult(username, Number.MAX_VALUE);
                     clearInterval(this.timer);
-                    document.location.reload();
+                    getResult();
+                    // document.location.reload();
                 }
             }, 1000)
+
+            username = document.getElementById("username").value;
+            document.getElementById("username").disabled = true;    
+            console.log(username);
+
             this.initializeMaze();
         }
     };
@@ -251,15 +260,60 @@ window.addEventListener("keydown", event => {
     }
 });
 
-const checkFinish = () => {
+const checkFinish = async () => {
     if (maze.currentState.i === maze.endState.i && maze.currentState.j === maze.endState.j){
         if(maze.soundOn){
             soundWin.play();
         }
         alert(" Yaaay! You mazed it :)\n" + " Total moves: " + maze.numOfMoves + "\n" 
             + " Total seconds: " + maze.currentTimer);
-        document.location.reload();
+
+        clearInterval(maze.timer);
+            
+        let result = 4*maze.currentTimer + maze.numOfMoves;
+        await sendResult(username, result);
+        getResult();
+        // document.location.reload();
     }
 }
 
 // #######################################
+
+const sendResult = async (username, result) => {
+    try { 
+        const URL = 'http://localhost:3000/';
+        const response = await fetch(URL, {
+            method : 'POST',
+            headers : {
+                'Content-Type': 'application/json'
+            },
+            mode : 'cors',
+            body : JSON.stringify({
+                name : username,
+                score : result
+            })
+        });
+        const jsonResponse = await response.json();
+        console.log(jsonResponse);
+        
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+const getResult = async () => {
+    try {
+        const URL = 'http://localhost:3000/';
+        const response = await fetch(URL, {
+            method : 'GET',
+            headers : {
+                'Content-Type': 'application/json'
+            }
+        });
+        const jsonResponse = await response.json();
+        console.log(jsonResponse);   
+             
+    } catch (err) {
+        console.log(err);
+    }
+}
