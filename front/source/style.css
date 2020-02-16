@@ -53,10 +53,24 @@ body{
     margin-top: 50px;
 }
 
+#name_button{
+    color: blanchedalmond;
+    background-color: rgb(54, 138, 21);
+    border: none;
+    color: white;
+    width: 100px;
+    height: 30px;
+    border-radius: 10px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 12px;
+    display: inline-block;
+}
+
 #header{
     float: left;
     margin-left: auto;
-    left: 200px;
+    left: 100px;
     margin-right: auto;
     width: 400px;
     position: relative;
@@ -86,4 +100,9 @@ td {
 
 #pointer{
     border-radius: 80%;
+}
+
+#label{
+    color: blanchedalmond;
+    width: 10px;
 }
