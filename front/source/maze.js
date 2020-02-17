@@ -32,6 +32,7 @@ function Maze(rows,
     this.MAX_ROWS = cols;
     this.numOfMoves = 0;
     this.soundOn = false;
+    this.gameOn = false;
 
     this.matrix = [];
     for (let i=0; i<2*this.MAX_ROWS-1; i++) {
@@ -131,8 +132,9 @@ function Maze(rows,
     this.startMaze = async () => {
         username = document.getElementById("username").value;
 
-        if (!this.timerStarted && username.length > 0) {
+        if (!this.timerStarted && username.length > 0 && !this.gameOn) {
             this.timerStarted = true;
+            this.gameOn = true;
             this.timer = window.setInterval( async () => {
                 this.currentTimer++;
 
@@ -140,10 +142,11 @@ function Maze(rows,
                     .innerText = 'Timer status: ' + this.currentTimer;
 
                 if (this.currentTimer === this.TIME_LIMIT) {
+                    this.gameOn = false;
                     alert(" GAME OVER\n" + " Number of moves: " + this.numOfMoves); 
                     await sendResult(username, Number.MAX_VALUE);
                     clearInterval(this.timer);
-                    getResult();
+                    getResult();                    
                     // document.location.reload();
                 }
             }, 1000)
@@ -177,7 +180,9 @@ const generateState = () => {
 };
 
 window.addEventListener("keydown", event => {
-    if (event.key === 'a') {
+    console.log(maze.gameOn);
+    
+    if (event.key === 'a' && maze.gameOn) {
         if(maze.currentState.j === 1){
             console.log("Ne mozes levo!");
         }
@@ -198,7 +203,7 @@ window.addEventListener("keydown", event => {
 });
 
 window.addEventListener("keydown", event => {
-    if (event.key === 'w') {
+    if (event.key === 'w' && maze.gameOn) {
         if(maze.currentState.i === 1){
             console.log("Ne mozes gore!");
         }
@@ -219,7 +224,7 @@ window.addEventListener("keydown", event => {
 });
 
 window.addEventListener("keydown", event => {
-    if (event.key === 'd') {
+    if (event.key === 'd' && maze.gameOn) {
         if(maze.currentState.j === maze.MAX_COLS){
             console.log("Ne mozes desno!");
         }
@@ -240,7 +245,7 @@ window.addEventListener("keydown", event => {
 });
 
 window.addEventListener("keydown", event => {
-    if (event.key === 's') {
+    if (event.key === 's' && maze.gameOn) {
         if(maze.currentState.i === maze.MAX_ROWS){
             console.log("Ne mozes dole!");
         }
@@ -268,8 +273,9 @@ const checkFinish = async () => {
         alert(" Yaaay! You mazed it :)\n" + " Total moves: " + maze.numOfMoves + "\n" 
             + " Total seconds: " + maze.currentTimer);
 
+        maze.gameOn = false;
         clearInterval(maze.timer);
-            
+
         let result = 4*maze.currentTimer + maze.numOfMoves;
         await sendResult(username, result);
         getResult();
