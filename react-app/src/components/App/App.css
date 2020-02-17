@@ -36,13 +36,3 @@
     transform: rotate(360deg);
   }
 }
-
-.colorBlack {
-  color:black;
-}
-
-.imgHeight {
-  height: 50px;
-  float: left;
-  border: 1px solid black;
-}

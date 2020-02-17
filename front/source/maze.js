@@ -144,7 +144,7 @@ function Maze(rows,
                 if (this.currentTimer === this.TIME_LIMIT) {
                     this.gameOn = false;
                     alert(" GAME OVER\n" + " Number of moves: " + this.numOfMoves); 
-                    await sendResult(username, Number.MAX_VALUE);
+                    await sendResult(username, Number.MIN_VALUE);
                     clearInterval(this.timer);
                     getResult();                    
                     // document.location.reload();
@@ -270,13 +270,12 @@ const checkFinish = async () => {
         if(maze.soundOn){
             soundWin.play();
         }
-        alert(" Yaaay! You mazed it :)\n" + " Total moves: " + maze.numOfMoves + "\n" 
-            + " Total seconds: " + maze.currentTimer);
+        alert(" Yaaay! You mazed it :)\n" + " Number of moves: " + maze.numOfMoves);
 
         maze.gameOn = false;
         clearInterval(maze.timer);
 
-        let result = 4*maze.currentTimer + maze.numOfMoves;
+        let result = 100 - maze.currentTimer - maze.numOfMoves;
         await sendResult(username, result);
         getResult();
         // document.location.reload();
@@ -287,7 +286,7 @@ const checkFinish = async () => {
 
 const sendResult = async (username, result) => {
     try { 
-        const URL = 'http://localhost:3000/';
+        const URL = 'http://localhost:2020/';
         const response = await fetch(URL, {
             method : 'POST',
             headers : {
@@ -309,7 +308,7 @@ const sendResult = async (username, result) => {
 
 const getResult = async () => {
     try {
-        const URL = 'http://localhost:3000/';
+        const URL = 'http://localhost:2020/';
         const response = await fetch(URL, {
             method : 'GET',
             headers : {
