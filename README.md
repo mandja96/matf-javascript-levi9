@@ -34,3 +34,7 @@ Run commands: `npm install` and `npm start`<br>
 React starts on port 3000<br>
 <br>
 <img src="https://github.com/mandja96/javascript-project-levi9/blob/master/images/react.png" width="85%" height="85%" /><br>
+
+
+#### Acknowledgments
+Big thanks to my colleague Nikola Janković (https://github.com/gianthead97), for sharing with me valuable knowledge and this link https://youtu.be/DLX62G4lc44, which helped me with the implementation of React part. 
